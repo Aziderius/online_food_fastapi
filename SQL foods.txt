@@ -1,0 +1,561 @@
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	first_name varchar(45),
+	last_name varchar(45),
+	email varchar(100),
+	phonenumber varchar(15),
+	hashed_password varchar(200),
+	role varchar(45)
+);
+
+DROP TABLE IF EXISTS catagories;
+
+CREATE TABLE categories (
+	id SERIAL PRIMARY KEY,
+	category_name varchar(50)
+);
+
+DROP TABLE IF EXISTS restaurants;
+
+CREATE TABLE restaurants (
+	id SERIAL PRIMARY KEY,
+	restaurant_name varchar(50),
+	category_id integer,
+	address varchar(100),
+	rating integer,
+	owner_id integer,
+	FOREIGN KEY (category_id) REFERENCES categories(id),
+	FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS foods;
+
+CREATE TABLE foods (
+	id SERIAL PRIMARY KEY,
+	food_name varchar(50),
+	price float,
+	restaurant_id integer,
+	description varchar(200),
+	FOREIGN KEY(restaurant_id) REFERENCES restaurants(id)
+);
+
+DROP TABLE IF EXISTS shoppping_cart;
+
+CREATE TABLE shopping_cart (
+	id SERIAL PRIMARY KEY,
+	quantity integer,
+	food_id integer,
+	total_price float,
+	user_id integer,
+	purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (food_id) REFERENCES foods(id),
+	FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS purchase_records;
+
+CREATE TABLE purchase_records (
+	id SERIAL PRIMARY KEY,
+	quantity integer,
+	food_id integer,
+	total_price float,
+	user_id integer,
+	purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (food_id) REFERENCES foods(id),
+	FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+/* CATEGORIES */
+INSERT INTO categories (category_name) VALUES ('pizza');
+INSERT INTO categories (category_name) VALUES ('chinese');
+INSERT INTO categories (category_name) VALUES ('italian');
+INSERT INTO categories (category_name) VALUES ('mexican');
+INSERT INTO categories (category_name) VALUES ('japanese');
+INSERT INTO categories (category_name) VALUES ('sushi');
+INSERT INTO categories (category_name) VALUES ('korean');
+INSERT INTO categories (category_name) VALUES ('hamburguers');
+INSERT INTO categories (category_name) VALUES ('tortas');
+INSERT INTO categories (category_name) VALUES ('seafood');
+INSERT INTO categories (category_name) VALUES ('breakfast');
+INSERT INTO categories (category_name) VALUES ('vegetarian');
+INSERT INTO categories (category_name) VALUES ('meat');
+INSERT INTO categories (category_name) VALUES ('hot dogs');
+INSERT INTO categories (category_name) VALUES ('tacos');
+
+/* OWNERS */
+INSERT INTO users (first_name, last_name, email, phonenumber, hashed_password, role) VALUES
+('Owner', 'One', 'owner1@email.com', '6681111111', 'Owner1test!', 'owner'),
+('Owner', 'Two', 'owner2@email.com', '6682222222', 'Owner2test!', 'owner');
+
+/* RESTAURANTS */
+INSERT INTO restaurants (restaurant_name, category_id, address, rating, owner_id) VALUES
+('Bigger Caesar', 1, 'Caesar St. 1587 N.', 4, 1),
+('Feng Huang', 2, 'Ki Lung St. 77 E.', 5, 1),
+('Torre de Pisa', 3, 'Piazza Arcivescovado St. 14 N.', 4, 1),
+('La Gorda Maria', 4, 'Degollado St. 1910 S.', 3, 1),
+('Shiro', 5, 'Gojo Satoru St. 1989 N.', 5, 1),
+('Sushi-kito', 6, 'Shibuya St. 28 W.', 3, 1),
+('Annyeonghaseyo', 7, 'Dorama St. 1643 S.', 2, 1),
+('Color Burger''s', 8, 'Bikini Bottom St. 25 E.', 5, 1),
+('La Mordidota', 9, 'Blvd. Centenario 1785 W.', 1, 1),
+('Los Gambones', 10, 'Maviri St. 1500 W.', 2, 1),
+('Ecuador', 11, 'Leyva St. 690 W.', 4, 1),
+('Mandala', 12, 'Spirit St. 69 N.', 3, 1),
+('B de Burro', 13, 'Independencia St. 525 W.', 5, 1),
+('El Greñudo', 14, 'Doroteo Arango St. 1143 W.', 2, 1),
+('El derecho', 15, 'Blvd. Juan de Dios Bátiz 813 E.', 4, 1),
+
+('Pizza Tuya', 1, 'Heriberto Valdez St. 339 N.', 5, 2),
+('Shen Long', 2, 'Kangjian Rd. 342 S.', 4, 2),
+('El Padrino', 3, 'Via Pausania 496 N.', 2, 2),
+('Axolotl', 4, 'Tepeyac St. 123 S.', 5, 2),
+('Murasaki', 5, 'Blvd. Chome Nishitenma 89 E.', 4, 2),
+('Boraku Risuto', 6, 'Blvd. Ogimachi-dori 159 W.', 5, 2),
+('Sonamu', 7, 'Sonamu St 589 S.', 3, 2),
+('McGoofy', 8, 'Sierra St. 684 N.', 2, 2),
+('La Guadalupana', 9, 'Rexford Dr. 333 N.', 3, 2),
+('EL Tianguis de la Almeja', 10, 'Bikini Mid St. 24 W.', 3, 2),
+('Radiant Garden', 11, 'Garden Kingdom Dr. 4 N.', 4, 2),
+('Golden Leaf', 12, 'Apple Dr. 1501 W.', 2, 2),
+('Los Potros Steakhouse', 13, 'Oakhurst Dr. 987 N.', 5, 2),
+('Valen-ciaga', 14, 'Miguel Hidalgo y Costilla St. 172 W.', 4, 2),
+('El huachicol', 15, 'Tlahuelilpan Dr. 2019 S.', 3, 2);
+
+
+/* FOODS */
+/* PIZZA */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Peperonni Pizza', 4.99, 1, 'Pizza With Peperonni :)'),
+('Mushroom Pizza', 4.99, 1, 'Pizza With Mushrooms :D'),
+('Salami Pizza', 4.99, 1, 'Pizza With Salami :P'),
+('3 Meat Pizza', 5.49, 1, 'Pizza with peperonni, salami and ham :O'),
+('3 Cheese Pizza', 4.49, 1, 'Pizza with Mozzarella, Parmesan and Asiago Cheese'),
+('Vegetarian Pizza', 4.49, 1, 'Pizza with vegetables but without cheese'),
+('Hawaian Pizza', 4.99, 1, 'Pizza with pineaple'),
+('Ham Pizza', 4.49, 1, 'Pizza with Ham (:'),
+('Mexican Pizza', 5.49, 1, 'Pizza with sausage, beans and chili'),
+('Supreme Pizza', 5.99, 1, 'This pizza is too supreme'),
+('Choose 2 ingredients', 4.99, 1, 'Pizza with 2 ingredients of your choice'),
+('Choose 3 Ingredients', 5.49, 1, 'Pizza with 3 ingredients of your choice'),
+('Choose 4 Ingredients', 5.99, 1, 'Pizza with 4 ingredients of your choice'),
+('Soda', 3.00, 1, 'Soda of your choice. 2L');
+
+/* CHINESE */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Fried Rice', 4.00, 2, 'Fried Rice for 2 people'),
+('Kung Pao', 5.00, 2, 'Chinese combination with peanuts'),
+('Spring rolls', 3.00, 2, '2, Fried rolls with vegetables or meat in your choice'),
+('Chinese soup', 3.50, 2, 'Chinese soup with chiken... good soup'),
+('red meat', 3.00, 2, 'pork meat for 1 person'),
+('Chop Suey', 5.00, 2, 'Chop Suey for 2 people'),
+('Pekin Roasted Duck', 5.00, 2, 'Used to be royal dish in medieval China'),
+('Sweet and Sour Pork', 4.50, 2, 'Can be substituted with chiken, beef or pork ribs'),
+('Hot Pot', 6.00, 2, 'With ingredients around the table, taste this soup cooking in the middle of your table'),
+('Dumplings', 3.50, 2, 'Popular fillings are minced pork, diced shrimp, ground chiken, beef and vegetables'),
+('Jazmin Tea', 2.50, 2, 'Jazmin Cold Team 2L'),
+('Green Team', 2.00, 2, 'Cold or hot'),
+('Water', 1.00, 2, 'bottle of water'),
+('Soda', 2.00, 2, 'Soda of your choice');
+
+/* ITALIAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Risotto alla milanese', 4.00, 3, 'prepared with white wine, Parmesan cheese, butter, onions and saffron'),
+('Pizza', 5.50, 3, 'Original pizza, with the exact italian taste'),
+('Spaghetti alla carbonara', 4.50, 3, 'added bacon with egg yolk, milk, cream and cheese'),
+('Gnocchi', 3.50, 3, 'Typical ingredients: cheese, spinach, eggs and variety of sauces'),
+('Lasagne', 7.50, 3, 'The famous and delicious Lasagne for 2 people'),
+('Fiorentina', 4.00, 3, 'Italian beef steak'),
+('Minestrone', 5.00, 3, 'Italian soup based of a mixture of vegetables and pasta'),
+('Soda', 2.00, 3, 'Soda of your choice'),
+('Water', 1.00, 3, 'bottle of water'),
+('Juice', 2.00, 3, 'Juice of your choice');
+
+/* MEXICAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Tacos dorados', 1.00, 4, 'Fried taco with vegetables'),
+('Gorditas', 1.50, 4, 'Cheese, chiken, beef in your choice'),
+('Flautas', 1.50, 4, 'Tortilla roll of cheese, chiken or beef'),
+('Pozole', 6.00, 4, 'Mexican soup used to be prepared for rituals by aztecas'),
+('Menudo', 5.00, 4, 'Taste this delicious soup made with nixtamal'),
+('Aztec Soup', 6.00, 4, 'Tortilla Soup with cheese, chili and vegetables'),
+('Tamales', 3.00, 4, 'Corn, beef or green sauce chiken'),
+('Stone soup', 4.50, 4, 'soup made with fish and vegetables with boiling stone'),
+('Water', 1.00, 4, 'bottle of water'),
+('Soda', 2.00, 4, 'Soda of your choice');
+
+/* JAPANESE */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Onigiri', 2.00, 5, 'Rice ball with seaweed'),
+('Udon', 5.00, 5, 'Handmade noodles with fried pork and vegetables'),
+('Ramen', 5.50, 5, 'Handmade noodles with egg, vegetables and sliced pork'),
+('Tamagoyaki', 4.00, 5, 'Rolled up egg crepe'),
+('Tonkatsu', 4.50, 5, 'Fried Pork with rice and vegetables'),
+('Miso Soup', 5.00, 5, 'Combination of miso paste and dashi broth'),
+('Curry Rice', 4.00, 5, 'Curry with meat and vegetables being cooked by boiling in water together'),
+('Takoyaki', 2.00, 5, 'known as octopus balls or octopus dumplings'),
+('Yakisoba', 5.50, 5, 'Fried noodle dish made by barbecuing noodles and other vegetables'),
+('Sushi', 4.00, 5, 'Original japanese sushi'),
+('Jazmin Tea', 2.50, 5, 'Jazmin Cold Team 2L'),
+('Green Team', 2.00, 5, 'Cold or hot'),
+('Water', 1.00, 5, 'bottle of water'),
+('Soda', 2.00, 5, 'Soda of your choice');
+
+/* SUSHI */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Sushi California', 5.00, 6, 'Natural sushi roll with cucumber and surimi'),
+('Sushi Bomb', 5.50, 6, 'Fried Sushi roll'),
+('Fried shrimp sushi', 6.00, 6, 'Fried sushi roll with sliced fried shimp on top'),
+('Avocado roll', 5.00, 6, 'Natural sushi with avocado on top'),
+('Ikigai sushi roll', 6.00, 6, 'Our specially made sushi roll with all our ikigai'),
+('Cheese roll', 5.00, 6, 'Natural sushi roll with gratin chesse on top'),
+('Hi no Sushi', 5.50, 6, 'Sushi spicy: natural or fired'),
+('Mizu no Sushi', 5.50, 6, 'Natural or baked sushi covered with our special spicy sauce'),
+('Kaze no Sushi', 5.50, 6, 'Baked sushi with fried chiken on top and flamed cheese'),
+('Yama no Sushi', 6.00, 6, 'Natural sushi on a bed of surimi and lettuce'), 
+('Jazmin Tea', 2.00, 6, 'Jazmin Cold Team 2L'),
+('Water', 1.00, 6, 'bottle of water'),
+('Soda', 2.00, 6, 'Soda of your choice');
+
+/* KOREAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Kimchi', 3.00, 7, 'Korean cabbage, radish, onion, ginger and scallion with chilli powder'),
+('Bibimbap', 4.00, 7, 'Can be served as meat-based or vegetarian dish'),
+('Red Rice cakes', 3.00, 7, 'Boiled rice cake with fish cake, onions, diced garlic, salt, sugar and assorted vegetables'),
+('Bulgogi', 3.50, 7, 'Sliced of marinated beef sirloin with onions, peppers and garlic'),
+('Korean Stew', 4.00, 7, 'Contains meat, seafood or vegetables of your choice'),
+('Jajangmyeon', 3.00, 7, 'Handmade noodles topped with raw cucumber slices and mixture of salty black soybean paste, diced pork and vegetables'),
+('Korean Fried Chiken', 4.00, 7, 'Chiken is coated with a sweet and spicy sauce'),
+('Spicy Cold Noodle', 4.00, 7, 'Cold broth, julienned cucumber, Korean pear slices, boiled egg and slices of cold boiled beef'),
+('Jazmin Tea', 2.00, 7, 'Jazmin Cold Team 2L'),
+('Water', 1.00, 7, 'bottle of water'),
+('Soda', 1.50, 7, 'Soda of your choice');
+
+/* BURGER */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('White Burger', 5.00, 8, 'A burger but white'),
+('Black Burger', 5.00, 8, 'A burger but black'),
+('Blue Burger', 5.00, 8, 'A burger but blue'),
+('Red Burger', 5.00, 8, 'A burger but red'),
+('Yellow Burger', 5.00, 8, 'A burger but yellow'),
+('Purple Burger', 5.00, 8, 'A burger but purple'),
+('Cyan Burger', 5.00, 8, 'A burger but cyan'),
+('Orange Burger', 5.00, 8, 'A burger but orange'),
+('Pink Burger', 5.00, 8, 'A burger but pink'),
+('Green Burger', 5.00, 8, 'A burger but green'),
+('Water', 1.00, 8, 'bottle of water'),
+('Soda', 1.50, 8, 'Soda of your choice');
+
+/* TORTAS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Beef Torta', 4.50, 9, 'Normal torta with vegetables and chili'),
+('Pork Torta', 4.75, 9, 'Pork torta with vegetables and chili'),
+('Vegetarian Torta', 5.00, 9, 'A torta but without meat but a lot of vegetables'),
+('Special Torta', 5.00, 9, 'Pork torta with cheese and ham with vegetables and chili'),
+('Torta de Carne Asada', 6.00, 9, 'Torta with carne asada and vegetables and chili with special sauce'),
+('Torta de Carnes adobada', 6.50, 9, 'Torta with marinated pork, vegetables and chili'),
+('Burger torta', 5.00, 9, 'Its like a burger but with torta bread'),
+('Fried potatoes', 2.50, 9, 'Fried potatoes with salt'),
+('Soda', 2.00, 9, 'Soda of your choice'),
+('Water', 1.00, 9, 'bottle of water'),
+('Juice', 2.00, 9, 'Juice of your choice');
+
+/* SEAFOOD */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Zarandeado Fish', 20.00, 10, 'Its a fish but zarandeado'),
+('Campechada', 6.00, 10, 'Seafood soup but in a super glass of wine'),
+('Fish Steak', 5.50, 10, 'Fried fish steak'),
+('Ceviche', 6.00, 10, 'Fish, crab, shrimp, octopus or clam'),
+('Aguachile', 6.00, 10, 'Shrimp prepared with lemon, chili, onion and our special sauce'),
+('Fish Tacos', 2.00, 10, 'Fish tacos with vegetables and sauce'),
+('Crab tostadas', 2.00, 10, 'Totadas with crab and vegetables and lemon'),
+('Marlin Quesadillas', 3.00, 10, 'Tortila with cheese and marlin'),
+('Caguama', 5.00, 10, 'Caguama soup'),
+('Beer', 2.50, 10, 'The comercial beer of your choice'),
+('Soda', 2.00, 10, 'Soda of your choice'),
+('Water', 1.00, 10, 'bottle of water'),
+('Juice', 2.00, 10, 'Juice of your choice');
+
+/* BREAKFAST */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('hot cakes', 4.00, 11, 'add some bacon or ham'),
+('waffles', 4.00, 11, 'add some bacon or ham'),
+('red chilaquiles', 6.00, 11, 'Chili sauce with chiken or beans'),
+('Green chilaquiles', 6.00, 11, 'Chili sauce with chiken or beans'),
+('crepe', 4.00, 11, 'Chocolate, strawberry, blueberry of your choice'),
+('Omelet', 5.00, 11, 'Cheese, potatoe, beef of chili of your choice'),
+('American coffee', 2.00, 11, 'its a regular but tasty american coffee'),
+('sandwiches', 5.00, 11, 'Chiken or ham of your choice with vegetables and cheese'),
+('crispy chiken', 6.00, 11, 'Fried and crispy chiken'),
+('Choko milk', 2.50, 11, 'Milk with chocolate, cinnamon and sugar'),
+('Water', 1.00, 11, 'bottle of water'),
+('Soda', 1.50, 11, 'Soda of your choice'),
+('Juice', 2.00, 11, 'Juice of your choice');
+
+/* VEGETARIAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Vegetable soup', 8.00, 12, 'good soup with some bread or toast'),
+('Vegan Roasted Sweet Potato Salad', 8.00, 12, 'Roasted sweet potatoes, avocado, black beans and raw kale)',
+('Vegetarian Burrito Bowl with Avocado Cream', 7.50, 12, 'Roasted veggies, savory beans and a lime-garlic avocado'),
+('Green Curry Buddha Bowl', 7.00, 12, 'Finished with creamy green curry sauce'),
+('Curried Pumpkin Soup', 7.50, 12, 'Velvety smooth and brilliant hued'),
+('Spring Salad with Barley', 8.00, 12, 'Dressed with a chive vinaigrette, crunchy sunflower seeds and tart cranberries'),
+('Sesame-Garlic Ramen Noodles', 7.00, 12, 'Tasty sesame-garlic noodles'),
+('Tofu Lettuce Wraps', 6.50, 12, 'Soy sauce, lime juice and a little chili paste'),
+('Kung Pao Tofu', 6.00, 12, 'With crunchy cashews and lots of veggies doused in a healthy dose of spicy kung pao sauce'),
+('Water', 1.00, 12, 'bottle of water'),
+('Soda', 1.50, 12, 'Soda of your choice'),
+('Juice', 1.50, 12, 'Juice of your choice');
+
+/* MEATS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Cast-iron Skillet Steak', 6.50, 13, 'A really good taste of a steak'),
+('Grilled Marinated Ribeyes', 7.00, 13, 'Barbecue-inspired marinade with a juicy steak'),
+('Steak Diane', 6.00, 13, 'Savory steak Diane Sauce'),
+('Emperor''s Tacos', 4.00, 13, 'Ribeye Tacos with our special sauce'),
+('Steak with Mushroom Sauce', 7.50, 13, 'Smothered in a rich mushroom-wine sauce'),
+('Wine', 20.00, 13, 'Red, Pink or White Wine'),
+('Beer', 2.00, 13, 'The comercial beer of your choice'),
+('Soda', 1.50, 13, 'Soda of your choice'),
+('Water', 1.00, 13, 'bottle of water'),
+('Juice', 1.50, 13, 'Juice of your choice');
+
+/* HOT DOGS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Normal Hot Dog', 3.50, 14, 'Sausage with vegetables and sauces'),
+('Special Hot Dog', 4.00, 14, 'Sausage with bacon and cheese'),
+('Pregnant Dogo', 4.50, 14, 'Roast sausage with a normal sausage rolled up with bacon and cheese'),
+('Italian Dogo', 4.50, 14, 'Special hot dog with peperonni and mozzarella'),
+('Mummy Dogo', 4.50, 14, 'Sausage rolled up with a fried tortila'),
+('Ranch Dogo', 4.50, 14, 'Sausage covered with an anaheim chili'),
+('Salchipapas', 4.00, 14, 'Fried potatoes with sausages prepared with sauces and vegetables'),
+('Soda', 1.50, 14, 'Soda of your choice'),
+('Water', 1.00, 14, 'bottle of water');
+
+/* TACOS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Tacos de carne asada', 1.50, 15, 'Tacos de carne asada :D'),
+('Tacos de adobada', 1.50, 15, 'Marinated pork tacos'),
+('Sirloin taco', 1.50, 15, 'Sirloin taco'),
+('Tacos al pastor', 1.50, 15, 'tasty taco al pastor'),
+('Soda', 2.00, 15, 'Soda of your choice'),
+('Water', 1.50, 15, 'bottle of water');
+
+/* PIZZA */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Peperonni Pizza', 5.00, 16, 'Pizza With Peperonni :)'),
+('Mushroom Pizza', 5.00, 16, 'Pizza With Mushrooms :D'),
+('Salami Pizza', 5.50, 16, 'Pizza With Salami :P'),
+('3 Meat Pizza', 6.00, 16, 'Pizza with peperonni, salami and ham :O'),
+('3 Cheese Pizza', 4.50, 16, 'Pizza with Mozzarella, Parmesan and Asiago Cheese'),
+('Vegetarian Pizza', 5.00, 16, 'Pizza with vegetables but without cheese'),
+('Hawaian Pizza', 5.00, 16, 'Pizza with pineaple'),
+('Ham Pizza', 5.50, 16, 'Pizza with Ham (:'),
+('Mexican Pizza', 6.00, 16, 'Pizza with sausage, beans and chili'),
+('Supreme Pizza', 7.00, 16, 'This pizza is too supreme'),
+('Choose 2 ingredients', 5.50, 16, 'Pizza with 2 ingredients of your choice'),
+('Choose 3 Ingredients', 6.00, 16, 'Pizza with 3 ingredients of your choice'),
+('Choose 4 Ingredients', 6.50, 16, 'Pizza with 4 ingredients of your choice'),
+('Soda', 2.50, 16, 'Soda of your choice. 2L');
+
+/* CHINESE */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Fried Rice', 3.50, 17, 'Fried Rice for 2 people'),
+('Kung Pao', 4.00, 17, 'Chinese combination with peanuts'),
+('Spring rolls', 2.50, 17, '2, Fried rolls with vegetables or meat in your choice'),
+('Chinese soup', 3.00, 17, 'Chinese soup with chiken... good soup'),
+('red meat', 2.50, 17, 'pork meat for 1 person'),
+('Chop Suey', 4.00, 17, 'Chop Suey for 2 people'),
+('Pekin Roasted Duck', 4.00, 17, 'Used to be royal dish in medieval China'),
+('Sweet and Sour Pork', 4.50, 17, 'Can be substituted with chiken, beef or pork ribs'),
+('Hot Pot', 5.00, 17, 'With ingredients around the table, taste this soup cooking in the middle of your table'),
+('Dumplings', 3.00, 17, 'Popular fillings are minced pork, diced shrimp, ground chiken, beef and vegetables'),
+('Jazmin Tea', 2.00, 17, 'Jazmin Cold Team 2L'),
+('Green Team', 2.00, 17, 'Cold or hot'),
+('Water', 1.50, 17, 'bottle of water'),
+('Soda', 2.50, 17, 'Soda of your choice');
+
+/* ITALIAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Risotto alla milanese', 5.00, 18, 'prepared with white wine, Parmesan cheese, butter, onions and saffron'),
+('Pizza', 6.00, 18, 'Original pizza, with the exact italian taste'),
+('Spaghetti alla carbonara', 5.00, 18, 'added bacon with egg yolk, milk, cream and cheese'),
+('Gnocchi', 4.50, 18, 'Typical ingredients: cheese, spinach, eggs and variety of sauces'),
+('Lasagne', 9.00, 18, 'The famous and delicious Lasagne for 2 people'),
+('Fiorentina', 5.00, 18, 'Italian beef steak'),
+('Minestrone', 6.00, 18, 'Italian soup based of a mixture of vegetables and pasta'),
+('Soda', 2.50, 18, 'Soda of your choice'),
+('Water', 1.50, 18, 'bottle of water'),
+('Juice', 2.50, 18, 'Juice of your choice');
+
+/* MEXICAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Tacos dorados', 1.50, 19, 'Fried taco with vegetables'),
+('Gorditas', 2.00, 19, 'Cheese, chiken, beef in your choice'),
+('Flautas', 2.00, 19, 'Tortilla roll of cheese, chiken or beef'),
+('Pozole', 6.00, 19, 'Mexican soup used to be prepared for rituals by aztecas'),
+('Menudo', 5.50, 19, 'Taste this delicious soup made with nixtamal'),
+('Aztec Soup', 6.00, 19, 'Tortilla Soup with cheese, chili and vegetables'),
+('Tamales', 2.00, 19, 'Corn, beef or green sauce chiken'),
+('Stone soup', 4.00, 19, 'soup made with fish and vegetables with boiling stone'),
+('Water', 1.00, 19, 'bottle of water'),
+('Soda', 2.00, 19, 'Soda of your choice');
+
+/* JAPANESE */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Onigiri', 2.00, 20, 'Rice ball with seaweed'),
+('Udon', 4.50, 20, 'Handmade noodles with fried pork and vegetables'),
+('Ramen', 5.00, 20, 'Handmade noodles with egg, vegetables and sliced pork'),
+('Tamagoyaki', 4.50, 20, 'Rolled up egg crepe'),
+('Tonkatsu', 5.00, 20, 'Fried Pork with rice and vegetables'),
+('Miso Soup', 5.50, 20, 'Combination of miso paste and dashi broth'),
+('Curry Rice', 4.50, 20, 'Curry with meat and vegetables being cooked by boiling in water together'),
+('Takoyaki', 1.50, 20, 'known as octopus balls or octopus dumplings'),
+('Yakisoba', 5.00, 20, 'Fried noodle dish made by barbecuing noodles and other vegetables'),
+('Sushi', 4.50, 20, 'Original japanese sushi'),
+('Jazmin Tea', 2.00, 20, 'Jazmin Cold Team 2L'),
+('Green Team', 2.50, 20, 'Cold or hot'),
+('Water', 1.50, 20, 'bottle of water'),
+('Soda', 2.50, 20, 'Soda of your choice');
+
+/* SUSHI */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Sushi California', 5.50, 21, 'Natural sushi roll with cucumber and surimi'),
+('Sushi Bomb', 6.00, 21, 'Fried Sushi roll'),
+('Fried shrimp sushi', 6.50, 21, 'Fried sushi roll with sliced fried shimp on top'),
+('Avocado roll', 5.00, 21, 'Natural sushi with avocado on top'),
+('Boraku Risuto roll', 7.00, 21, 'Our specially made sushi roll'),
+('Cheese roll', 5.50, 21, 'Natural sushi roll with gratin chesse on top'),
+('Hi no Sushi', 5.00, 21, 'Sushi spicy: natural or fired'),
+('Mizu no Sushi', 6.00, 21, 'Natural or baked sushi covered with our special spicy sauce'),
+('Kaze no Sushi', 6.00, 21, 'Baked sushi with fried chiken on top and flamed cheese'),
+('Yama no Sushi', 6.50, 21, 'Natural sushi on a bed of surimi and lettuce'), 
+('Jazmin Tea', 2.00, 21, 'Jazmin Cold Team 2L'),
+('Water', 1.00, 21, 'bottle of water'),
+('Soda', 2.00, 21, 'Soda of your choice');
+
+/* KOREAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Kimchi', 3.50, 22, 'Korean cabbage, radish, onion, ginger and scallion with chilli powder'),
+('Bibimbap', 4.50, 22, 'Can be served as meat-based or vegetarian dish'),
+('Red Rice cakes', 3.50, 22, 'Boiled rice cake with fish cake, onions, diced garlic, salt, sugar and assorted vegetables'),
+('Bulgogi', 4.00, 22, 'Sliced of marinated beef sirloin with onions, peppers and garlic'),
+('Korean Stew', 3.50, 22, 'Contains meat, seafood or vegetables of your choice'),
+('Jajangmyeon', 3.00, 22, 'Handmade noodles topped with raw cucumber slices and mixture of salty black soybean paste, diced pork and vegetables'),
+('Korean Fried Chiken', 3.50, 22, 'Chiken is coated with a sweet and spicy sauce'),
+('Spicy Cold Noodle', 4.00, 22, 'Cold broth, julienned cucumber, Korean pear slices, boiled egg and slices of cold boiled beef'),
+('Jazmin Tea', 2.00, 22, 'Jazmin Cold Team 2L'),
+('Water', 1.00, 22, 'bottle of water'),
+('Soda', 1.50, 22, 'Soda of your choice');
+
+/* BURGER */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Normal Burger', 5.00, 23, 'Our normal but tasty burger'),
+('Special Burger', 5.50, 23, 'With bacon, more cheese and our special sauce'),
+('McGoofy Burger', 6.00, 23, 'With special sauce, 250gr meat and bacon with double cheese'),
+('Double McGoofy Burger', 7.00, 23, 'With double ration of meat and all our magic McGoofy burger'),
+('BBQ Burger', 5.50, 23, 'Add more sauces like buffalo or ranch'),
+('Portobello Burger', 5.50, 23, 'A big giant portobello in your burger'),
+('Chili Burger', 5.50, 23, 'Spicy burger'),
+('Chiken Burger', 5.50, 23, 'Chiken burger... its like a burger but with chiken in it'),
+('Fried Chiken Burger', 6.00, 23, 'Its like the chiken burger but fried'),
+('Veggie Burger', 7.00, 23, 'You like burgers? or just pretend so? Eat our famous and tasty veggie burger'),
+('Water', 1.00, 23, 'bottle of water'),
+('Soda', 1.50, 23, 'Soda of your choice');
+
+/* TORTAS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Beef Torta', 4.00, 24, 'Normal torta with vegetables and chili'),
+('Pork Torta', 5.00, 24, 'Pork torta with vegetables and chili'),
+('Vegetarian Torta', 6.00, 24, 'A torta but without meat but a lot of vegetables'),
+('Special Torta', 5.50, 24, 'Pork torta with cheese and ham with vegetables and chili'),
+('Torta de Carne Asada', 5.00, 24, 'Torta with carne asada and vegetables and chili with special sauce'),
+('Torta de Carnes adobada', 5.50, 24, 'Torta with marinated pork, vegetables and chili'),
+('Burger torta', 5.50, 24, 'Its like a burger but with torta bread'),
+('Fried potatoes', 3.00, 24, 'Fried potatoes with salt'),
+('Soda', 2.00, 24, 'Soda of your choice'),
+('Water', 1.00, 24, 'bottle of water'),
+('Juice', 2.00, 24, 'Juice of your choice');
+
+/* SEAFOOD */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Zarandeado Fish', 25.00, 25, 'Its a fish but zarandeado'),
+('Campechada', 7.00, 25, 'Seafood soup but in a super glass of wine'),
+('Fish Steak', 6.00, 25, 'Fried fish steak'),
+('Ceviche', 7.00, 25, 'Fish, crab, shrimp, octopus or clam'),
+('Aguachile', 6.50, 25, 'Shrimp prepared with lemon, chili, onion and our special sauce'),
+('Fish Tacos', 1.50, 25, 'Fish tacos with vegetables and sauce'),
+('Crab tostadas', 1.50, 25, 'Totadas with crab and vegetables and lemon'),
+('Marlin Quesadillas', 2.50, 25, 'Tortila with cheese and marlin'),
+('Caguama', 6.00, 25, 'Caguama soup'),
+('Beer', 2.50, 25, 'The comercial beer of your choice'),
+('Soda', 2.00, 25, 'Soda of your choice'),
+('Water', 1.00, 25, 'bottle of water'),
+('Juice', 2.00, 25, 'Juice of your choice');
+
+/* BREAKFAST */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('hot cakes', 3.00, 26, 'add some bacon or ham'),
+('waffles', 3.50, 26, 'add some bacon or ham'),
+('red chilaquiles', 5.50, 26, 'Chili sauce with chiken or beans'),
+('Green chilaquiles', 5.50, 26, 'Chili sauce with chiken or beans'),
+('crepe', 4.00, 26, 'Chocolate, strawberry, blueberry of your choice'),
+('Omelet', 4.50, 26, 'Cheese, potatoe, beef of chili of your choice'),
+('American coffee', 2.00, 26, 'its a regular but tasty american coffee'),
+('sandwiches', 4.00, 26, 'Chiken or ham of your choice with vegetables and cheese'),
+('crispy chiken', 5.00, 26, 'Fried and crispy chiken'),
+('Choko milk', 3.00, 26, 'Milk with chocolate, cinnamon and sugar'),
+('Water', 1.00, 26, 'bottle of water'),
+('Soda', 1.50, 26, 'Soda of your choice'),
+('Juice', 2.00, 26, 'Juice of your choice');
+
+/* VEGETARIAN */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Vegetable soup', 8.50, 27, 'good soup with some bread or toast'),
+('Vegan Roasted Sweet Potato Salad', 8.50, 27, 'Roasted sweet potatoes, avocado, black beans and raw kale'),
+('Vegetarian Burrito Bowl with Avocado Cream', 8.00, 27, 'Roasted veggies, savory beans and a lime-garlic avocado'),
+('Green Curry Buddha Bowl', 8.00, 27, 'Finished with creamy green curry sauce'),
+('Curried Pumpkin Soup', 6.50, 27, 'Velvety smooth and brilliant hued'),
+('Spring Salad with Barley', 8.50, 27, 'Dressed with a chive vinaigrette, crunchy sunflower seeds and tart cranberries'),
+('Sesame-Garlic Ramen Noodles', 7.50, 27, 'Tasty sesame-garlic noodles'),
+('Tofu Lettuce Wraps', 7.50, 27, 'Soy sauce, lime juice and a little chili paste'),
+('Kung Pao Tofu', 5.00, 27, 'With crunchy cashews and lots of veggies doused in a healthy dose of spicy kung pao sauce'),
+('Water', 1.00, 27, 'bottle of water'),
+('Soda', 1.50, 27, 'Soda of your choice'),
+('Juice', 1.50, 27, 'Juice of your choice');
+
+
+/* MEATS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Cast-iron Skillet Steak', 7.00, 28, 'A really good taste of a steak'),
+('Grilled Marinated Ribeyes', 7.50, 28, 'Barbecue-inspired marinade with a juicy steak'),
+('Steak Diane', 6.50, 28, 'Savory steak Diane Sauce'),
+('Emperor''s Tacos', 3.00, 28, 'Ribeye Tacos with our special sauce'),
+('Steak with Mushroom Sauce', 7.00, 28, 'Smothered in a rich mushroom-wine sauce'),
+('Wine', 25.00, 28, 'Red, Pink or White Wine'),
+('Beer', 2.50, 28, 'The comercial beer of your choice'),
+('Soda', 2.50, 28, 'Soda of your choice'),
+('Water', 1.00, 28, 'bottle of water'),
+('Juice', 2.50, 28, 'Juice of your choice');
+
+/* HOT DOGS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Normal Hot Dog', 3.00, 29, 'Sausage with vegetables and sauces'),
+('Special Hot Dog', 3.50, 29, 'Sausage with bacon and cheese'),
+('Pregnant Dogo', 4.00, 29, 'Roast sausage with a normal sausage rolled up with bacon and cheese'),
+('Italian Dogo', 4.00, 29, 'Special hot dog with peperonni and mozzarella'),
+('Mummy Dogo', 4.00, 29, 'Sausage rolled up with a fried tortila'),
+('Ranch Dogo', 4.00, 29, 'Sausage covered with an anaheim chili'),
+('Salchipapas', 4.50, 29, 'Fried potatoes with sausages prepared with sauces and vegetables'),
+('Soda', 2.50, 29, 'Soda of your choice'),
+('Water', 1.00, 29, 'bottle of water');
+
+/* TACOS */
+INSERT INTO foods (food_name, price, restaurant_id, description) VALUES
+('Tacos de carne asada', 2.00, 30, 'Tacos de carne asada :D'),
+('Tacos de adobada', 2.00, 30, 'Marinated pork tacos'),
+('Sirloin taco', 2.00, 30, 'Sirloin taco'),
+('Tacos al pastor', 2.00, 30, 'tasty taco al pastor'),
+('Soda', 2.00, 30, 'Soda of your choice'),
+('Water', 1.50, 30, 'bottle of water');

@@ -1,0 +1,50 @@
+Como usuario podrá registraste al proyecto; para registraste se le pedirán los siguientes datos:
+-Nombre(s)
+-Apellido
+-Email
+-Numero de telefono
+-Contraseña
+
+Los nombres no deberán de tener numeros o simbolos en ellos, de no ser asi, se le mostrará un mensaje
+con el siguiente contenido "The first Name or last Name must only containt letters".
+
+El email deberá ser de algun formato de correo valido, verificando que contenga "@" seguido de algún
+dominio seguido de un ".com", ".net" o similar. De lo contrario se le mostrará un mensaje al usuario
+con el siguiente contenido "The Email must be valid, please retry"
+
+El numero de telefono deberá contener 10 digitos (668-811-1111), de no tener un numero de celular
+valido se le mostrará un mensaje al usuario con le siguiente contenido "Your phone number must
+be valid, please retry".
+
+La contraseña deberá tener las siguientes condicionantes:
+-Al menos tener una letra en minuscula
+-Al menos una letra en mayuscula
+-Al menos un numerico
+-Al menos un simbolo dentro de la siguiente lista: !"#$%&/()=?¡¿-.,
+-Tener una longitud minima de 6 caracteres.
+
+De no cumplir con lo anterior mencionado se le mostrará un mensaje con el siguiente contenido:
+"Password must have at least one uppercase, one lowercase, one digit, one symbol, and be at
+least 6 characters long."
+
+Una vez registrado, el usuario podrá aprovechar los endpoints para filtrar la información del proyecto
+como por ejemplo filtrar por:
+-nombre de categoria
+-nombre de restaurante
+-nombre de comida
+-rating de restaurantes
+
+Una vez que encuentre la información de la comida que desee agregar podrá agregarla al carrito 
+mediante otro endpoint el cual le pedirá el ID de la comida que quiera y la cantidad que desee agregar
+al carrito.
+
+EL usuario solo podrá agregar comidas de un solo restaurante, de lo contrario se le mostrará un mensaje
+con el siguiente contenido: "please add food from only one restaurant to your cart"
+
+Cuando el carrito tenga registros del pedido del usuario, el usuario podrá:
+-editar la cantidad de comida que desee
+-agregar mas registros al carrito
+-eliminar registros del carrito
+
+Cuando el usuario quiera dar su orden por terminada, podrá aprovechar un endpoint para pagar
+su orden total. Esto vaciará su carrito, pero creará una copia de la orden como historial.
