@@ -75,6 +75,16 @@ async def get_restaurant_by_name(db: db_dependency, restaurant_name: str = Query
     raise HTTPException(status_code=404, detail='Restaurant not found')
 
 
+@router.get("/restaurant_rating", status_code=status.HTTP_200_OK)
+async def get_restaurants_by_rating(db: db_dependency, rating: int = Query (gt=0, lt=6)):
+    rating_model = db.query(Restaurants).filter(Restaurants.rating == rating).all()
+
+    if rating_model is not None:
+        return rating_model
+    
+    raise HTTPException(status_code=404, detail="Restaurants with this rating doesn't found")
+
+
 @router.get("/restaurant/{restaurant_id}", status_code=status.HTTP_200_OK)
 async def get_food_by_restaurant_id(db: db_dependency, restaurant_id: int = Path(gt=0)):
     restaurant_model = db.query(Restaurants).filter(Restaurants.id == restaurant_id).first()

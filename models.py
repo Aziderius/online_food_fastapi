@@ -12,7 +12,7 @@ class Users(Base):
     email = Column(String, unique=True)
     phonenumber = Column(String, unique=True)
     hashed_password = Column(String)
-    role = Column(String)
+    role = Column(String, default='user')
 
 
 class Categories(Base):
