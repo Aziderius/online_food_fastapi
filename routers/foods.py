@@ -3,8 +3,7 @@ from models import Categories, Restaurants, Foods
 from database import SessionLocal
 from typing import Annotated
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import func, select
-from sqlalchemy import join
+from sqlalchemy.sql.expression import func
 from starlette import status
 
 
