@@ -1,0 +1,61 @@
+como usuario(dueño) podrá registrarse al proyecto; para registrarse se le pedirán
+los siguientes datos:
+-Nombre(s)
+-Apellido
+-Email
+-Numero de telefono
+-Contraseña
+
+Los nombres no deberán de tener numeros o simbolos en ellos, de no ser asi, se le mostrará un mensaje
+con el siguiente contenido "The first Name or last Name must only containt letters".
+
+El email deberá ser de algun formato de correo valido, verificando que contenga "@" seguido de algún
+dominio seguido de un ".com", ".net" o similar. De lo contrario se le mostrará un mensaje al usuario
+con el siguiente contenido "The Email must be valid, please retry"
+
+El numero de telefono deberá contener 10 digitos (668-811-1111), de no tener un numero de celular
+valido se le mostrará un mensaje al usuario con le siguiente contenido "Your phone number must
+be valid, please retry".
+
+La contraseña deberá tener las siguientes condicionantes:
+-Al menos tener una letra en minuscula
+-Al menos una letra en mayuscula
+-Al menos un numerico
+-Al menos un simbolo dentro de la siguiente lista: !"#$%&/()=?¡¿-.,
+-Tener una longitud minima de 6 caracteres.
+
+De no cumplir con lo anterior mencionado se le mostrará un mensaje con el siguiente contenido:
+"Password must have at least one uppercase, one lowercase, one digit, one symbol, and be at
+least 6 characters long."
+
+El poder registrarme directamente como un "owner" el sistema directamente me tendrá
+que reconocer como tal, asignandome dicho rol para poder ser capaz de ejecutar
+las siguientes actividades:
+
+-Podrá ver los restaurantes que ha registrado
+
+-Podrá seleccionar algun restaurante que tenga para observar el menu actual
+
+-Pueder registrar uno o mas restaurantes a nombre del owner registrado; y para eso
+se le pedirán los siguientes datos de restaurante:
+    -Nombre del restaurante
+    -el id de la categoria del restaurante que va a registrar
+    -la dirección
+    -el rating segun su historial
+
+-Agregar comidas al restaurante que tenga registrado; y para esto se le pedirán
+los siguientes datos por cada comida que vaya a registrar:
+    -Nombre de la comida
+    -El precio en dolares
+    -el id del restaurante al que desea agregar el platillo
+    -descripción del platillo
+
+-Editar platillos ya registrados del restaurante que necesite simplemente colocando
+el id del platillo que desea editar. Consecuentemente, mediante un formulario
+que le pedirá los siguientes datos, podrá editar el platillo:
+    -Nombre de la comida
+    -El precio en dolares
+    -el id del restaurante al que desea agregar el platillo
+    -descripción del platillo
+
+-Eliminar platillos

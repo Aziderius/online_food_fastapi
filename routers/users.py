@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from typing import Annotated
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from database import SessionLocal
 from .auth import get_current_user, validate_passwd, validate_phonenumber
 from pydantic import BaseModel, Field
