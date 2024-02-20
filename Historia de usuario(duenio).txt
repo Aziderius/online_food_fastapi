@@ -59,3 +59,11 @@ que le pedirá los siguientes datos, podrá editar el platillo:
     -descripción del platillo
 
 -Eliminar platillos
+
+En caso de querer cambiar cualquiera de los datos de un restaurante en concreto, el owner
+podrá mandar una solicitud de cambio al administrador para realizar dicho cambio. Los datos
+que se podrán editar son:
+-Nombre del restaurante
+-el id de la categoria del restaurante
+-la dirección
+-el id del dueño (en caso de cambiar de dueño)

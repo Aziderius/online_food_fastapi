@@ -67,6 +67,23 @@ CREATE TABLE purchase_records (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+DROP TABLE IF EXISTS restaurant_requests;
+
+CREATE TABLE restaurant_requests(
+	id SERIAL PRIMARY KEY,
+	restaurant_id integer,
+	restaurant_name varchar(50),
+	category_id integer,
+	address varchar(100),
+	rating integer,
+	owner_id integer,
+	request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	request_done BOOLEAN DEFAULT FALSE,
+	FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
+	FOREIGN KEY (category_id) REFERENCES categories(id),
+	FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+
 /* CATEGORIES */
 INSERT INTO categories (category_name) VALUES ('pizza');
 INSERT INTO categories (category_name) VALUES ('chinese');

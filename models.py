@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, Boolean
 from sqlalchemy import DateTime, func
 
 
@@ -63,3 +63,16 @@ class PurchaseRecords(Base):
     total_price = Column(Float)
     user_id = Column(Integer, ForeignKey("users.id"))
     purchase_date = Column(DateTime, server_default=func.now())
+
+class RestaurantRequests(Base):
+    __tablename__= 'restaurant_requests'
+
+    id = Column(Integer, primary_key=True, index=True)
+    restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
+    restaurant_name = Column(String, unique=True)
+    category_id = Column(Integer, ForeignKey("categories.id"))
+    address = Column(String, unique=True)
+    rating = Column(Integer)
+    owner_id = Column(Integer, ForeignKey("users.id"))
+    request_date = Column(DateTime, server_default=func.now())
+    request_done = Column(Boolean, default=False)
