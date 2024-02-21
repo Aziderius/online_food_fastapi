@@ -4,15 +4,15 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 from .auth import get_current_user, validate_passwd, validate_phonenumber, validate_name, validate_last_name
 from pydantic import BaseModel, Field
-from models import Foods, Users, Restaurants, Categories
+from models import Foods, Users, Restaurants, Categories, RestaurantRequests
 from starlette import status
 from passlib.context import CryptContext
 from email_validator import validate_email
 
 
 router = APIRouter(
-    prefix='/user',
-    tags=['user']
+    prefix='/owner',
+    tags=['owner']
 )
 
 
@@ -37,6 +37,15 @@ class CreateRestaurantRequest(BaseModel):
     category_id: int = Field(gt=0)
     address: str = Field(min_length=10)
     rating: int = Field(gt=0, lt=6)
+
+
+class CreateRequest(BaseModel):
+    restaurant_id: int = Field(gt=0)
+    restaurant_name: str = Field(min_length=2)
+    category_id: int = Field(gt=0)
+    address: str = Field(min_length=10)
+    rating: int = Field(gt=0, lt=6)
+    owner_id: int = Field(gt=0)
 
 
 class CreateFoodRequest(BaseModel):
@@ -85,13 +94,14 @@ async def get_menu_by_restaurant_id(user: user_dependency, db:db_dependency, res
     if user is None or user.get("user_role") != 'owner':
         raise HTTPException(status_code=401, detail='Authentication Failed')
     
-    menu_model = db.query(Restaurants, Foods.restaurant_id == restaurant_id)\
-    .filter(Restaurants.owner_id == user.get('id')).all()
+    restaurant_model = db.query(Restaurants).filter(Restaurants.owner_id == user.get('id')).first()
 
-    if not menu_model:
-        raise HTTPException(status_code=404, detail='Menu not found')
+    food_model = db.query(Foods).filter(Foods.restaurant_id == restaurant_id).all()
+
+    if not restaurant_model:
+        raise HTTPException(status_code=403, detail='This restaurant does not belongs to you')
     
-    return menu_model
+    return restaurant_model, food_model
 
 
 @router.post("/new_restaurant", status_code=status.HTTP_201_CREATED)
@@ -145,13 +155,16 @@ async def create_food(user: user_dependency,
     return food_model
 
 
-@router.put("/edit_food/{food_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/food/{food_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def edit_food(user: user_dependency,
                     db: db_dependency,
                     create_food_request: CreateFoodRequest,
                     food_id: int = Path(gt=0)):
-    if user is None or user.get("user_role") != 'owner':
+    if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
+    
+    if user.get("user_role") not in ['owner', 'admin']:
+        raise HTTPException(status_code=403, detail='Permission Denied')
     
     food_model = db.query(Foods).filter(Foods.id == food_id).first()
     if not food_model:
@@ -171,8 +184,11 @@ async def edit_food(user: user_dependency,
 
 @router.delete("/food/{food_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_food(user: user_dependency, db: db_dependency, food_id: int = Path(gt=0)):
-    if user is None or user.get("user_role") != 'owner':
+    if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
+    
+    if user.get("user_role") not in ['owner', 'admin']:
+        raise HTTPException(status_code=403, detail='Permission Denied')
     
     food_model = db.query(Foods).filter(Foods.id == food_id).first()
     if not food_model:
@@ -187,7 +203,7 @@ async def delete_food(user: user_dependency, db: db_dependency, food_id: int = P
     db.commit()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/create_owner", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
     if not validate_name(create_user_request.first_name):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='First name must contain letters')
@@ -218,3 +234,22 @@ async def create_user(db: db_dependency, create_user_request: CreateUserRequest)
     db.add(create_user_model)
     db.commit()
     
+
+@router.post("/request_restaurant/{restaurant_id}", status_code=status.HTTP_201_CREATED)
+async def request_to_change_restaurant_info(user: user_dependency,
+                                                db: db_dependency,
+                                                create_request: CreateRequest,
+                                                restaurant_id: int = Path(gt=0)):
+    if user is None or user.get("user_role") != 'owner':
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+        
+    restaurant_model = db.query(Restaurants).filter(Restaurants.id == restaurant_id)\
+    .filter(Restaurants.owner_id == user.get("id"))
+
+    if not restaurant_model:
+        raise HTTPException(status_code=404, detail='Restaurant not found or does not belong to the user')
+        
+    request_model = RestaurantRequests(**create_request.model_dump())
+
+    db.add(request_model)
+    db.commit()

@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, Boolean, ForeignKeyConstraint
 from sqlalchemy import DateTime, func
 
 
@@ -32,6 +32,12 @@ class Restaurants(Base):
     rating = Column(Integer)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
+    __table_args__ = (
+        ForeignKeyConstraint(['category_id'], ['categories.id'], ondelete='CASCADE'),
+        ForeignKeyConstraint(['owner_id'], ['users.id'], ondelete='CASCADE')
+    )
+
+
 
 class Foods(Base):
     __tablename__ = 'foods'
@@ -42,6 +48,9 @@ class Foods(Base):
     restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
     description = Column(String)
 
+    __table_args__ = (
+        ForeignKeyConstraint(['restaurant_id'], ['restaurants.id'], ondelete='CASCADE'),
+    )
 
 class ShoppingCart(Base):
     __tablename__ = 'shopping_cart'
@@ -76,3 +85,7 @@ class RestaurantRequests(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
     request_date = Column(DateTime, server_default=func.now())
     request_done = Column(Boolean, default=False)
+
+    __table_args__ = (
+        ForeignKeyConstraint(['restaurant_id'], ['restaurants.id'], ondelete='CASCADE'),
+    )
