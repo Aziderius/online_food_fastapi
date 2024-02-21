@@ -1,0 +1,52 @@
+como usuario(admin) podrá registrarse al proyecto; para registrarse se le pedirán
+los siguientes datos:
+-Nombre(s)
+-Apellido
+-Email
+-Numero de telefono
+-Contraseña
+
+Los nombres no deberán de tener numeros o simbolos en ellos, de no ser asi, se le mostrará un mensaje
+con el siguiente contenido "The first Name or last Name must only containt letters".
+
+El email deberá ser de algun formato de correo valido, verificando que contenga "@" seguido de algún
+dominio seguido de un ".com", ".net" o similar. De lo contrario se le mostrará un mensaje al usuario
+con el siguiente contenido "The Email must be valid, please retry"
+
+El numero de telefono deberá contener 10 digitos (668-811-1111), de no tener un numero de celular
+valido se le mostrará un mensaje al usuario con le siguiente contenido "Your phone number must
+be valid, please retry".
+
+La contraseña deberá tener las siguientes condicionantes:
+-Al menos tener una letra en minuscula
+-Al menos una letra en mayuscula
+-Al menos un numerico
+-Al menos un simbolo dentro de la siguiente lista: !"#$%&/()=?¡¿-.,
+-Tener una longitud minima de 6 caracteres.
+
+De no cumplir con lo anterior mencionado se le mostrará un mensaje con el siguiente contenido:
+"Password must have at least one uppercase, one lowercase, one digit, one symbol, and be at
+least 6 characters long."
+
+El poder registrarme directamente como un "admin" el sistema directamente me tendrá
+que reconocer como tal, asignandome dicho rol para poder ser capaz de ejecutar
+las siguientes funciones:
+-Ver todos los usuarios
+-Buscar un usuario en específico utilizando su ID
+-Eliminar usuario
+-Tener acceso a la tabla purchase_records que es el historial de las compras de los usuarios
+-filtrar en la tabla purchase_records por usuario usando el ID del anterior mencionado
+-Tener acceso a las solicitudes que hacen los owners para cambiar información específica de los 
+restaurantes (ver historia de usuario(duenio))
+-También tendrá acceso a las solicitudes, ya sean echas o no
+-Para poder contrastar la información de las solicitudes podrá buscar la información registrada
+en la base de datos usando el ID del restaurante que solicitante
+-Podrá actualizar los datos del restaurante contrastados con la solicitud y así poder actualizar la
+base de datos. La información requerida es la siguiente:
+	-el ID del restaurante
+		-nombre del restaurante
+		-ID de la categoria
+		-dirección
+		-rating
+		-el ID del dueño
+-Eliminar restaurante y todo lo relacionado al restaurant_id
